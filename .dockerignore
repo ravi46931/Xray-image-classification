@@ -1,0 +1,6 @@
+venv
+
+logs
+artifacts
+secrets.txt
+commands.md
