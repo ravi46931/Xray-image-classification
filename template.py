@@ -18,16 +18,14 @@ list_of_files=[
     f"{source_folder}/cloud_storage/__init__.py",
     f"{source_folder}/cloud_storage/s3_operations.py",
     f"{source_folder}/cloud_storage/s3_ops.py",
-
-    f"{source_folder}/utils/__init__.py",
-    f"{source_folder}/utils/utils.py",
+  
     f"{source_folder}/ml/__init__.py",
     f"{source_folder}/ml/arch.py",
-    f"{source_folder}/ml/model_service.py",
-    f"{source_folder}/ml/standardization.py",
+ 
     f"{source_folder}/constants/__init__.py",
     f"{source_folder}/pipeline/__init__.py",
     f"{source_folder}/pipeline/train_pipeline.py",
+    f"{source_folder}/pipeline/pred_pipeline.py",
    
     f"{source_folder}/entity/__init__.py",
     f"{source_folder}/entity/config_entity.py",

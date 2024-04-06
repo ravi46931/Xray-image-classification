@@ -1,11 +1,9 @@
 import os
 import sys
-
-import bentoml
-import joblib
 import torch
-import torch.nn.functional as F
+import joblib
 from torch.nn import Module
+import torch.nn.functional as F
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import StepLR, _LRScheduler
 from tqdm import tqdm
@@ -13,7 +11,7 @@ from tqdm import tqdm
 from xray.constants import *
 from xray.entity.artifact_entity import (
     DataTransformationArtifacts,
-    ModelTrainerArtifacts
+    ModelTrainerArtifacts,
 )
 from xray.entity.config_entity import ModelTrainerConfig
 from xray.exception import CustomException
@@ -33,17 +31,11 @@ class ModelTrainer:
 
         self.model: Module = Net()
 
-    def train(self, optimizer: Optimizer) -> None:
-        """
-        Description: To train the model
-
-        input: model,device,train_loader,optimizer,epoch
-
-        output: loss, batch id and accuracy
-        """
-        logging.info("Entered the train method of Model trainer class")
+    def train(self, optimizer: Optimizer):
 
         try:
+            logging.info("Entered the train method of Model trainer class")
+
             self.model.train()
 
             pbar = tqdm(self.data_transformation_artifacts.transformed_train_object)
@@ -87,18 +79,9 @@ class ModelTrainer:
 
         except Exception as e:
             raise CustomException(e, sys)
-        
 
     def test(self):
         try:
-            """
-            Description: To test the model
-
-            input: model, DEVICE, test_loader
-
-            output: average loss and accuracy
-
-            """
             logging.info("Entered the test method of Model trainer class")
 
             self.model.eval()
@@ -160,8 +143,6 @@ class ModelTrainer:
 
         except Exception as e:
             raise CustomException(e, sys)
-        
-
 
     def initiate_model_trainer(self) -> ModelTrainerArtifacts:
         try:
@@ -190,7 +171,9 @@ class ModelTrainer:
 
                 self.test()
 
-            os.makedirs(self.model_trainer_config.MODEL_TRAINER_ARTIFACTS_DIR, exist_ok=True)
+            os.makedirs(
+                self.model_trainer_config.MODEL_TRAINER_ARTIFACTS_DIR, exist_ok=True
+            )
 
             torch.save(model, self.model_trainer_config.MODEL_FILE_PATH)
 
@@ -200,14 +183,6 @@ class ModelTrainer:
             train_transforms_obj = joblib.load(
                 self.data_transformation_artifacts.train_transform_file_path
             )
-
-            # bentoml.pytorch.save_model(
-            #     name=self.model_trainer_config.trained_bentoml_model_name,
-            #     model=model,
-            #     custom_objects={
-            #         self.model_trainer_config.train_transforms_key: train_transforms_obj
-            #     },
-            # )
 
             model_trainer_artifact = ModelTrainerArtifacts(
                 self.model_trainer_config.MODEL_FILE_PATH

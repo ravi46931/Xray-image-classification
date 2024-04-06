@@ -1,7 +1,7 @@
-import os
-from xray.constants import *
 from dataclasses import dataclass
 from torch.utils.data.dataloader import DataLoader
+
+from xray.constants import *
 
 @dataclass
 class DataIngestionArtifacts:

@@ -1,6 +1,7 @@
 venv
-
+stuffs/
 logs
 artifacts
 secrets.txt
 commands.md
+implement.md

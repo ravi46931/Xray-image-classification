@@ -1,10 +1,7 @@
 import os
 import sys
-from io import StringIO
-from typing import List, Union
 import boto3
-from botocore.exceptions import ClientError
-from mypy_boto3_s3.service_resource import Bucket
+
 from xray.logger import logging
 from xray.exception import CustomException
 
@@ -22,13 +19,6 @@ class UploadFile:
         remove: bool = True,
     ) -> None:
 
-        """
-        Method Name :   upload_file
-
-        Description :   This method uploads the from_filename file to bucket_name bucket with to_filename as bucket filename
-        
-        Output      :   Folder is created in s3 bucket
-        """
         logging.info("Entered the upload_file method of S3Operations class")
         try:
             logging.info(
@@ -51,5 +41,3 @@ class UploadFile:
 
         except Exception as e:
             raise CustomException(e, sys)
-
-    

@@ -1,20 +1,19 @@
-from datetime import datetime
+import torch
 from typing import List
 
-import torch
 
-ARTIFACTS = 'artifacts'
+ARTIFACTS = "artifacts"
 
 # Data ingestion constants
-DATA_INGESTION_ARTIFACTS_DIR = 'DataIngestionArtifacts'
-TRAIN_DIR = 'train'
-TEST_DIR = 'test'
+DATA_INGESTION_ARTIFACTS_DIR = "DataIngestionArtifacts"
+TRAIN_DIR = "train"
+TEST_DIR = "test"
 BUCKET_NAME: str = "xraylungimage"
 S3_DATA_FOLDER: str = "data"
 
 
 # Data transformation constants
-DATA_TRANSFORMATION_ARTIFACTS_DIR = 'DataTransformationArtifacts'
+DATA_TRANSFORMATION_ARTIFACTS_DIR = "DataTransformationArtifacts"
 
 ## Data Transformation
 CLASS_LABEL_1: str = "NORMAL"
@@ -54,20 +53,19 @@ PIN_MEMORY: bool = True
 
 # Model Training Constants
 TRAINED_MODEL_DIR: str = "trained_model"
-MODEL_TRAINER_ARTIFACTS_DIR = 'ModelTrainerArtifacts'
+MODEL_TRAINER_ARTIFACTS_DIR = "ModelTrainerArtifacts"
 TRAINED_MODEL_NAME: str = "model.pt"
 DEVICE: torch.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 LEARNING_RATE = 0.01
 MOMENTUM = 0.8
 STEP_SIZE: int = 6
 GAMMA: int = 0.5
-EPOCHS: int = 1
+EPOCHS: int = 100
 
 # Model Evaluation Constants
-MODEL_EVALUATION_ARTIFACTS_DIR = 'ModelEvaluationArtifacts'
-ACCURACY_FILE = 'accuracy.json'
+MODEL_EVALUATION_ARTIFACTS_DIR = "ModelEvaluationArtifacts"
+ACCURACY_FILE = "accuracy.json"
 
 # Prediction constants
 TARGET_WIDTH = 180
 IMAGE_HEIGHT = 100
-

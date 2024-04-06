@@ -2,20 +2,26 @@ import os
 import sys
 import joblib
 from typing import Tuple
-from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
+from torch.utils.data import DataLoader, Dataset
+
 from xray.constants import *
 from xray.exception import CustomException
 from xray.logger import logging
-from xray.cloud_storage.s3_operations import S3Operation
-from xray.entity.config_entity import DataIngestionConfig, DataTransformationConfig
-from xray.entity.artifact_entity import DataIngestionArtifacts, DataTransformationArtifacts
+from xray.entity.config_entity import DataTransformationConfig
+from xray.entity.artifact_entity import (
+    DataIngestionArtifacts,
+    DataTransformationArtifacts,
+)
+
 
 class DataTransformation:
-    def __init__(self, 
-                 data_ingestion_artifacts: DataIngestionArtifacts,
-                 data_transformation_config: DataTransformationConfig):
+    def __init__(
+        self,
+        data_ingestion_artifacts: DataIngestionArtifacts,
+        data_transformation_config: DataTransformationConfig,
+    ):
         self.data_ingestion_artifacts = data_ingestion_artifacts
         self.data_transformation_config = data_transformation_config
 
@@ -51,7 +57,7 @@ class DataTransformation:
 
         except Exception as e:
             raise CustomException(e, sys)
-        
+
     def transforming_testing_data(self):
         logging.info(
             "Entered the transforming_testing_data method of Data transformation class"
@@ -78,10 +84,9 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys)
 
-
     def data_loader(
-            self, train_transform: transforms.Compose, test_transform: transforms.Compose
-        ) -> Tuple[DataLoader, DataLoader]:
+        self, train_transform: transforms.Compose, test_transform: transforms.Compose
+    ) -> Tuple[DataLoader, DataLoader]:
         try:
             logging.info("Entered the data_loader method of Data transformation class")
 
@@ -111,7 +116,7 @@ class DataTransformation:
 
         except Exception as e:
             raise CustomException(e, sys)
-   
+
     def initiate_data_transformation(self):
         try:
             logging.info(
@@ -122,19 +127,23 @@ class DataTransformation:
 
             test_transform = self.transforming_testing_data()
 
-            os.makedirs(self.data_transformation_config.DATA_TRANSFORMATION_ARTIFACTS_DIR, exist_ok=True)
+            os.makedirs(
+                self.data_transformation_config.DATA_TRANSFORMATION_ARTIFACTS_DIR,
+                exist_ok=True,
+            )
 
             train_loader, test_loader = self.data_loader(
-                train_transform=train_transform, 
-                test_transform=test_transform
+                train_transform=train_transform, test_transform=test_transform
             )
 
             joblib.dump(
-                train_transform, self.data_transformation_config.TRAIN_TRANSFORMS_FILE_PATH
+                train_transform,
+                self.data_transformation_config.TRAIN_TRANSFORMS_FILE_PATH,
             )
 
             joblib.dump(
-                test_transform, self.data_transformation_config.TEST_TRANSFORMS_FILE_PATH
+                test_transform,
+                self.data_transformation_config.TEST_TRANSFORMS_FILE_PATH,
             )
 
             data_transformation_artifact = DataTransformationArtifacts(
@@ -149,6 +158,6 @@ class DataTransformation:
             )
 
             return data_transformation_artifact
-    
+
         except Exception as e:
             raise CustomException(e, sys)

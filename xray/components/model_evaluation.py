@@ -1,29 +1,30 @@
 import os
 import sys
-import joblib
 import json
-from typing import Tuple
-
 import torch
-from xray.ml.arch import Net
-from torch.nn import CrossEntropyLoss, Module
+from typing import Tuple
 from torch.optim import SGD, Optimizer
-from torch.utils.data import DataLoader, Dataset
-from torchvision import transforms
-from torchvision.datasets import ImageFolder
+from torch.utils.data import DataLoader
+from torch.nn import CrossEntropyLoss, Module
+
 from xray.constants import *
-from xray.exception import CustomException
+from xray.ml.arch import Net
 from xray.logger import logging
-from xray.cloud_storage.s3_operations import S3Operation
-from xray.entity.config_entity import DataIngestionConfig, ModelEvaluationConfig
-from xray.entity.artifact_entity import ModelTrainerArtifacts, DataTransformationArtifacts
+from xray.exception import CustomException
+from xray.entity.config_entity import ModelEvaluationConfig
+from xray.entity.artifact_entity import (
+    ModelTrainerArtifacts,
+    DataTransformationArtifacts,
+)
+
 
 class ModelEvaluation:
-    def __init__ (self,
-                   data_transformation_artifacts: DataTransformationArtifacts,
-                   model_trainer_artifacts: ModelTrainerArtifacts,
-                   model_evaluation_config: ModelEvaluationConfig
-                   ):
+    def __init__(
+        self,
+        data_transformation_artifacts: DataTransformationArtifacts,
+        model_trainer_artifacts: ModelTrainerArtifacts,
+        model_evaluation_config: ModelEvaluationConfig,
+    ):
         self.data_transformation_artifacts = data_transformation_artifacts
         self.model_trainer_artifacts = model_trainer_artifacts
         self.model_evaluation_config = model_evaluation_config
@@ -56,7 +57,6 @@ class ModelEvaluation:
 
         except Exception as e:
             raise CustomException(e, sys)
-        
 
     def test_net(self) -> float:
         logging.info("Entered the test_net method of Model evaluation class")
@@ -106,9 +106,7 @@ class ModelEvaluation:
                 / self.model_evaluation_config.TOTAL
             ) * 100
 
-            accuracy_dict = {
-                "ACCURACY ON TEST SET": accuracy
-            }
+            accuracy_dict = {"ACCURACY ON TEST SET": accuracy}
 
             logging.info("Exited the test_net method of Model evaluation class")
 
@@ -116,24 +114,27 @@ class ModelEvaluation:
 
         except Exception as e:
             raise CustomException(e, sys)
-      
 
     def initiate_model_evaluation(self):
         try:
+            logging.info("Model evaluation initiated")
             accuracy = self.test_net()
-            os.makedirs(self.model_evaluation_config.MODEL_EVALUATION_ARTIFACTS_DIR, exist_ok=True)
+            os.makedirs(
+                self.model_evaluation_config.MODEL_EVALUATION_ARTIFACTS_DIR,
+                exist_ok=True,
+            )
 
-            with open(self.model_evaluation_config.ACCURACY_FILE_PATH, "w") as json_file:
+            with open(
+                self.model_evaluation_config.ACCURACY_FILE_PATH, "w"
+            ) as json_file:
                 json.dump(accuracy, json_file)
 
             model_evaluation_artifacts = ModelTrainerArtifacts(
                 self.model_evaluation_config.ACCURACY_FILE_PATH
             )
+            logging.info("Model evaluation completed")
 
             return model_evaluation_artifacts
-        
-        
+
         except Exception as e:
             raise CustomException(e, sys)
-        
-    

@@ -1,11 +1,7 @@
 import os
-import torch
-import numpy as np
 from PIL import Image
 import streamlit as st
-from pathlib import Path
-from torchvision.transforms import transforms
-import torchvision.transforms.functional as TF
+
 from xray.constants import *
 from xray.pipeline.pred_pipeline import PredPipeline
 

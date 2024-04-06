@@ -1,4 +1,3 @@
-
 from xray.pipeline.train_pipeline import TrainPipeline
 
 def main():

@@ -9,7 +9,7 @@ artifacts
 logs
 secrets.txt
 commands.md
-
+stuffs/
 # Distribution / packaging
 .Python
 build/
